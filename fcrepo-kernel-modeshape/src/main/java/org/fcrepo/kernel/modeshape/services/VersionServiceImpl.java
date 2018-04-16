@@ -24,6 +24,7 @@ import static org.fcrepo.kernel.api.FedoraTypes.CONTENT_DIGEST;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_BINARY;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_NON_RDF_SOURCE_DESCRIPTION;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_RESOURCE;
+import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_DATASTREAM;
 import static org.fcrepo.kernel.api.FedoraTypes.MEMENTO;
 import static org.fcrepo.kernel.api.FedoraTypes.MEMENTO_DATETIME;
 import static org.fcrepo.kernel.api.FedoraTypes.MEMENTO_ORIGINAL;
@@ -80,6 +81,7 @@ import org.fcrepo.kernel.api.exception.RepositoryRuntimeException;
 import org.fcrepo.kernel.api.identifiers.IdentifierConverter;
 import org.fcrepo.kernel.api.models.Container;
 import org.fcrepo.kernel.api.models.FedoraBinary;
+import org.fcrepo.kernel.api.models.FedoraDatastream;
 import org.fcrepo.kernel.api.models.FedoraResource;
 import org.fcrepo.kernel.api.models.NonRdfSourceDescription;
 import org.fcrepo.kernel.api.rdf.DefaultRdfStream;
@@ -89,6 +91,7 @@ import org.fcrepo.kernel.api.services.VersionService;
 import org.fcrepo.kernel.api.services.policy.StoragePolicyDecisionPoint;
 import org.fcrepo.kernel.modeshape.ContainerImpl;
 import org.fcrepo.kernel.modeshape.FedoraBinaryImpl;
+import org.fcrepo.kernel.modeshape.FedoraDatastreamImpl;
 import org.fcrepo.kernel.modeshape.NonRdfSourceDescriptionImpl;
 import org.fcrepo.kernel.modeshape.utils.iterators.RelaxedRdfAdder;
 import org.slf4j.Logger;
@@ -197,6 +200,20 @@ public class VersionServiceImpl extends AbstractService implements VersionServic
             }
 
             return new ContainerImpl(node);
+        } catch (final RepositoryException e) {
+            throw new RepositoryRuntimeException(e);
+        }
+    }
+
+    private FedoraDatastream createDatastream(final FedoraSession session, final String path) {
+        try {
+            final Node dsNode = findOrCreateNode(session, path, FEDORA_DATASTREAM);
+
+            if (dsNode.canAddMixin(FEDORA_RESOURCE)) {
+                dsNode.addMixin(FEDORA_RESOURCE);
+            }
+
+            return new FedoraDatastreamImpl(dsNode);
         } catch (final RepositoryException e) {
             throw new RepositoryRuntimeException(e);
         }

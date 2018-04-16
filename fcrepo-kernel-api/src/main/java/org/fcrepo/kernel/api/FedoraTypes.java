@@ -29,6 +29,8 @@ public interface FedoraTypes {
 
     String FEDORA_CONTAINER = "fedora:Container";
 
+    String FEDORA_DATASTREAM = "fedora:Datastream";
+
     String FEDORA_NON_RDF_SOURCE_DESCRIPTION = "fedora:NonRdfSourceDescription";
 
     String FEDORA_PAIRTREE = "fedora:Pairtree";
