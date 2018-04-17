@@ -30,6 +30,7 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_BINARY;
+import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_DESCRIPTION;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_NON_RDF_SOURCE_DESCRIPTION;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_RESOURCE;
 import static org.fcrepo.kernel.api.RdfLexicon.NT_VERSION_FILE;
@@ -67,7 +68,11 @@ public class BinaryServiceImpl extends AbstractService implements BinaryService 
                 });
             }
 
-            final FedoraBinaryImpl binary = new FedoraBinaryImpl(dsNode.getNode(JCR_CONTENT));
+            final Node contentNode = dsNode.getNode(JCR_CONTENT);
+            final FedoraBinaryImpl binary = new FedoraBinaryImpl(contentNode);
+            if (contentNode.canAddMixin(FEDORA_DESCRIPTION)) {
+                contentNode.addMixin(FEDORA_DESCRIPTION);
+            }
 
             if (dsNode.isNew()) {
                 touch(binary.getNode());

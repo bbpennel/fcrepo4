@@ -77,6 +77,8 @@
  */
 [fedora:NonRdfSourceDescription] > fedora:Resource mixin
 
+[fedora:Description] > fedora:Resource mixin
+
 /*
  * A Fedora LDPCv TimeMap.
  */

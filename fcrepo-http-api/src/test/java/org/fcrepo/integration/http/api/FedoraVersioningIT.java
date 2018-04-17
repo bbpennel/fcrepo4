@@ -610,7 +610,7 @@ public class FedoraVersioningIT extends AbstractResourceIT {
         try (final CloseableDataset dataset = getDataset(new HttpGet(mementoUri))) {
             final DatasetGraph results = dataset.asDatasetGraph();
 
-            final Node mementoSubject = createURI(mementoUri);
+            final Node mementoSubject = createURI(binaryMementoUri);
 
             assertTrue("Type must be a fedora:Binary",
                     results.contains(ANY, mementoSubject, RDF.type.asNode(), FEDORA_BINARY.asNode()));

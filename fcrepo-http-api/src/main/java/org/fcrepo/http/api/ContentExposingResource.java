@@ -134,6 +134,7 @@ import org.fcrepo.kernel.api.exception.ServerManagedPropertyException;
 import org.fcrepo.kernel.api.exception.ServerManagedTypeException;
 import org.fcrepo.kernel.api.exception.UnsupportedAlgorithmException;
 import org.fcrepo.kernel.api.exception.UnsupportedAccessTypeException;
+import org.fcrepo.kernel.api.models.BinaryDescription;
 import org.fcrepo.kernel.api.models.Container;
 import org.fcrepo.kernel.api.models.FedoraBinary;
 import org.fcrepo.kernel.api.models.FedoraResource;
@@ -286,8 +287,8 @@ public abstract class ContentExposingResource extends FedoraBaseResource {
      */
     protected RdfStream getResourceTriples(final int limit) {
         // use the thing described, not the description, for the subject of descriptive triples.
-        if (resource() instanceof NonRdfSourceDescription && !resource().isMemento()) {
-            resource = resource().getDescribedResource();
+        if (resource() instanceof NonRdfSourceDescription) {
+            resource = ((FedoraBinary) resource().getDescribedResource()).getBinaryDescription();
         }
         final PreferTag returnPreference;
 
@@ -347,7 +348,7 @@ public abstract class ContentExposingResource extends FedoraBaseResource {
         }
 
         final RdfStream rdfStream = new DefaultRdfStream(
-                asNode(resource()), streams.stream().reduce(empty(), Stream::concat));
+                asNode(resource().getDescribedResource()), streams.stream().reduce(empty(), Stream::concat));
 
         if (httpTripleUtil != null && ldpPreferences.prefersServerManaged()) {
             return httpTripleUtil.addHttpComponentModelsForResourceToStream(rdfStream, resource(), uriInfo,
@@ -517,20 +518,25 @@ public abstract class ContentExposingResource extends FedoraBaseResource {
     protected void addResourceHttpHeaders(final FedoraResource resource) {
         if (resource instanceof FedoraBinary) {
             final FedoraBinary binary = (FedoraBinary)resource;
-            final Date createdDate = binary.getCreatedDate() != null ? Date.from(binary.getCreatedDate()) : null;
-            final Date modDate = binary.getLastModifiedDate() != null ? Date.from(binary.getLastModifiedDate()) : null;
+            final BinaryDescription binaryDesc = binary.getBinaryDescription();
 
-            final ContentDisposition contentDisposition = ContentDisposition.type("attachment")
-                    .fileName(binary.getFilename())
-                    .creationDate(createdDate)
-                    .modificationDate(modDate)
-                    .size(binary.getContentSize())
-                    .build();
+            if (binaryDesc != null) {
+                final Date createdDate = binary.getCreatedDate() != null ? Date.from(binary.getCreatedDate()) : null;
+                final Date modDate = binary.getLastModifiedDate() != null ? Date.from(binary.getLastModifiedDate())
+                        : null;
 
-            servletResponse.addHeader(CONTENT_TYPE, binary.getMimeType());
-            servletResponse.addHeader(CONTENT_LENGTH, String.valueOf(binary.getContentSize()));
-            servletResponse.addHeader("Accept-Ranges", "bytes");
-            servletResponse.addHeader(CONTENT_DISPOSITION, contentDisposition.toString());
+                final ContentDisposition contentDisposition = ContentDisposition.type("attachment")
+                        .fileName(binaryDesc.getFilename())
+                        .creationDate(createdDate)
+                        .modificationDate(modDate)
+                        .size(binary.getContentSize())
+                        .build();
+
+                servletResponse.addHeader(CONTENT_TYPE, binaryDesc.getMimeType());
+                servletResponse.addHeader(CONTENT_LENGTH, String.valueOf(binaryDesc.getContentSize()));
+                servletResponse.addHeader("Accept-Ranges", "bytes");
+                servletResponse.addHeader(CONTENT_DISPOSITION, contentDisposition.toString());
+            }
         }
 
         servletResponse.addHeader(LINK, "<" + LDP_NAMESPACE + "Resource>;rel=\"type\"");

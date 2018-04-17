@@ -105,4 +105,6 @@ public interface FedoraBinary extends FedoraResource {
      */
     Collection<URI> checkFixity(IdentifierConverter<Resource, FedoraResource> idTranslator,
             Collection<String> algorithms) throws UnsupportedAlgorithmException, UnsupportedAccessTypeException;
+
+    BinaryDescription getBinaryDescription();
 }

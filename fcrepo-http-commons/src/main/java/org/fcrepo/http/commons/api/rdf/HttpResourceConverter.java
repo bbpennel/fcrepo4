@@ -56,6 +56,7 @@ import org.fcrepo.kernel.api.exception.InvalidResourceIdentifierException;
 import org.fcrepo.kernel.api.exception.RepositoryRuntimeException;
 import org.fcrepo.kernel.api.exception.TombstoneException;
 import org.fcrepo.kernel.api.identifiers.IdentifierConverter;
+import org.fcrepo.kernel.api.models.BinaryDescription;
 import org.fcrepo.kernel.api.models.FedoraBinary;
 import org.fcrepo.kernel.api.models.FedoraResource;
 import org.fcrepo.kernel.api.models.FedoraTimeMap;
@@ -324,14 +325,15 @@ public class HttpResourceConverter extends IdentifierConverter<Resource,FedoraRe
             // For binary description memento, follows id/fcr:metadata/fcr:versions/memento format
             if (originalOrMemento instanceof FedoraBinary) {
                 path = replaceOnce(path, "/" + LDPCV_BINARY_TIME_MAP, "/" + FCR_VERSIONS);
-            } else if (originalOrMemento instanceof NonRdfSourceDescription) {
+            } else if (originalOrMemento instanceof NonRdfSourceDescription ||
+                    resource instanceof BinaryDescription) {
                 path = replaceOnce(path, "/" + LDPCV_TIME_MAP, "/" + FCR_METADATA + "/" + FCR_VERSIONS);
             } else {
                 // For regular container, replace timemap name with versions path
                 path = replaceOnce(path, "/" + LDPCV_TIME_MAP, "/" + FCR_VERSIONS);
             }
 
-        } else if (resource instanceof NonRdfSourceDescription) {
+        } else if (resource instanceof NonRdfSourceDescription || resource instanceof BinaryDescription) {
             // binary description, non-memento
             path += "/" + FCR_METADATA;
         }

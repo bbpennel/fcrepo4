@@ -25,6 +25,7 @@ import org.fcrepo.kernel.api.models.FedoraResource;
 import org.fcrepo.kernel.modeshape.FedoraTimeMapImpl;
 import org.fcrepo.kernel.modeshape.NonRdfSourceDescriptionImpl;
 import org.fcrepo.kernel.modeshape.FedoraBinaryImpl;
+import org.fcrepo.kernel.modeshape.BinaryDescriptionImpl;
 import org.fcrepo.kernel.modeshape.ContainerImpl;
 import org.fcrepo.kernel.modeshape.TombstoneImpl;
 
@@ -53,6 +54,8 @@ public class NodeResourceConverter extends Converter<Node, FedoraResource> {
 
         if (NonRdfSourceDescriptionImpl.hasMixin(node)) {
             fedoraResource = new NonRdfSourceDescriptionImpl(node);
+        } else if (BinaryDescriptionImpl.hasMixin(node)) {
+            fedoraResource = new BinaryDescriptionImpl(node);
         } else if (FedoraBinaryImpl.hasMixin(node)) {
             fedoraResource = new FedoraBinaryImpl(node);
         } else if (TombstoneImpl.hasMixin(node)) {

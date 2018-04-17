@@ -31,6 +31,8 @@ public interface FedoraTypes {
 
     String FEDORA_NON_RDF_SOURCE_DESCRIPTION = "fedora:NonRdfSourceDescription";
 
+    String FEDORA_DESCRIPTION = "fedora:Description";
+
     String FEDORA_PAIRTREE = "fedora:Pairtree";
 
     String FEDORA_REPOSITORY_ROOT = "fedora:RepositoryRoot";

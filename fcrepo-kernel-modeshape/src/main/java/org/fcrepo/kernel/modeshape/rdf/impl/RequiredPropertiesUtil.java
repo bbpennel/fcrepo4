@@ -26,7 +26,6 @@ import static org.fcrepo.kernel.api.RdfLexicon.FEDORA_CONTAINER;
 import static org.fcrepo.kernel.api.RdfLexicon.FEDORA_RESOURCE;
 import static org.fcrepo.kernel.api.RdfLexicon.LAST_MODIFIED_BY;
 import static org.fcrepo.kernel.api.RdfLexicon.LAST_MODIFIED_DATE;
-import static org.fcrepo.kernel.api.RdfLexicon.NON_RDF_SOURCE;
 import static org.fcrepo.kernel.api.RdfLexicon.RDF_SOURCE;
 
 import java.util.Collection;
@@ -54,7 +53,7 @@ public class RequiredPropertiesUtil {
             RDF_SOURCE, CONTAINER, FEDORA_CONTAINER, FEDORA_RESOURCE);
 
     private final static Collection<Resource> BINARY_TYPES = asList(
-            NON_RDF_SOURCE, FEDORA_BINARY, FEDORA_RESOURCE);
+            FEDORA_BINARY, FEDORA_RESOURCE);
 
     /**
      * Throws a ConstraintViolationException if the model does not contain all required server managed triples for a

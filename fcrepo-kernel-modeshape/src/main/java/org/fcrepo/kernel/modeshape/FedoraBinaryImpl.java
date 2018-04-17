@@ -29,6 +29,7 @@ import org.fcrepo.kernel.api.exception.UnsupportedAccessTypeException;
 import org.fcrepo.kernel.api.exception.UnsupportedAlgorithmException;
 import org.fcrepo.kernel.api.identifiers.IdentifierConverter;
 import org.fcrepo.kernel.api.models.NonRdfSourceDescription;
+import org.fcrepo.kernel.api.models.BinaryDescription;
 import org.fcrepo.kernel.api.models.FedoraBinary;
 import org.fcrepo.kernel.api.models.FedoraResource;
 import org.fcrepo.kernel.api.services.policy.StoragePolicyDecisionPoint;
@@ -124,6 +125,28 @@ public class FedoraBinaryImpl extends FedoraResourceImpl implements FedoraBinary
             return getNode().getParent();
         } catch (final RepositoryException e) {
             throw new RepositoryRuntimeException(e);
+        }
+    }
+
+    @Override
+    public BinaryDescription getBinaryDescription() {
+        if (isMemento()) {
+            // find the associated description memento if it exists
+            final Node node = getDescriptionNode();
+            try {
+                final String path = node.getPath();
+                final String mementoId = path.substring(path.lastIndexOf("/") + 1);
+                final Node binaryDescNode = node.getNode("../../" + LDPCV_TIME_MAP + "/" + mementoId);
+
+                return new BinaryDescriptionImpl(binaryDescNode);
+            } catch (final PathNotFoundException e) {
+                return null;
+            } catch (final RepositoryException e) {
+                throw new RepositoryRuntimeException(e);
+            }
+
+        } else {
+            return new BinaryDescriptionImpl(getNode());
         }
     }
 

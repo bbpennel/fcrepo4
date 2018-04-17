@@ -22,6 +22,7 @@ import static java.util.Arrays.stream;
 import static org.apache.jena.graph.NodeFactory.createURI;
 import static org.fcrepo.kernel.api.FedoraTypes.CONTENT_DIGEST;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_BINARY;
+import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_DESCRIPTION;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_NON_RDF_SOURCE_DESCRIPTION;
 import static org.fcrepo.kernel.api.FedoraTypes.FEDORA_RESOURCE;
 import static org.fcrepo.kernel.api.FedoraTypes.MEMENTO;
@@ -158,10 +159,22 @@ public class VersionServiceImpl extends AbstractService implements VersionServic
         if (rdfInputStream == null) {
             // With no rdf body provided, create version from current resource state.
             final FedoraResource described = resource.getDescribedResource();
-            mementoRdfStream = described.getTriples(idTranslator, VERSION_TRIPLES);
+            final FedoraResource source;
+            if (resource instanceof NonRdfSourceDescription) {
+                source = ((FedoraBinary) described).getBinaryDescription();
+            } else {
+                source = described;
+            }
+            mementoRdfStream = source.getTriples(idTranslator, VERSION_TRIPLES);
             resourceUri = getUri(described, idTranslator);
         } else {
-            resourceUri = getUri(resource.getDescribedResource(), idTranslator);
+            final FedoraResource described = resource.getDescribedResource();
+            // if (resource instanceof NonRdfSourceDescription) {
+            // described = ((FedoraBinary) resource.getDescribedResource()).getBinaryDescription();
+            // } else {
+            // described = resource.getDescribedResource();
+            // }
+            resourceUri = getUri(described, idTranslator);
 
             final Model inputModel = ModelFactory.createDefaultModel();
             inputModel.read(rdfInputStream, mementoUri, rdfFormat.getName());
@@ -213,10 +226,10 @@ public class VersionServiceImpl extends AbstractService implements VersionServic
             if (dsNode.canAddMixin(FEDORA_RESOURCE)) {
                 dsNode.addMixin(FEDORA_RESOURCE);
             }
-            //
-            // if (dsNode.canAddMixin(FEDORA_NON_RDF_SOURCE_DESCRIPTION)) {
-            // dsNode.addMixin(FEDORA_NON_RDF_SOURCE_DESCRIPTION);
-            // }
+
+            if (dsNode.canAddMixin(FEDORA_DESCRIPTION)) {
+                dsNode.addMixin(FEDORA_DESCRIPTION);
+            }
 
             if (dsNode.canAddMixin(FEDORA_BINARY)) {
                 dsNode.addMixin(FEDORA_BINARY);
