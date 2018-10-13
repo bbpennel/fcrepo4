@@ -39,7 +39,6 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -133,7 +132,7 @@ public abstract class AbstractResourceIT {
     }
 
     protected HttpResponse execute(final HttpUriRequest method)
-        throws ClientProtocolException, IOException {
+        throws IOException {
         logger.debug("Executing: " + method.getMethod() + " to " +
                          method.getURI());
         return client.execute(method);
@@ -166,7 +165,7 @@ public abstract class AbstractResourceIT {
 
 
     protected int getStatus(final HttpUriRequest method)
-        throws ClientProtocolException, IOException {
+        throws IOException {
         final HttpResponse response = execute(method);
         final int result = response.getStatusLine().getStatusCode();
         if (!(result > 199) || !(result < 400)) {
@@ -176,7 +175,7 @@ public abstract class AbstractResourceIT {
     }
 
     protected String getContentType(final HttpUriRequest method)
-        throws ClientProtocolException, IOException {
+        throws IOException {
         final HttpResponse response = execute(method);
         final int result = response.getStatusLine().getStatusCode();
         assertEquals(OK.getStatusCode(), result);

@@ -217,7 +217,7 @@ public class ViewHelpers {
      */
     public boolean isVersionedNode(final Graph graph, final Node subject) {
         return listObjects(graph, subject, RDF.type.asNode()).toList().stream().map(Node::getURI)
-            .anyMatch((MEMENTO_TYPE.toString())::equals);
+            .anyMatch((MEMENTO_TYPE)::equals);
     }
 
     /**

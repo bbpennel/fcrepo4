@@ -144,12 +144,12 @@ public class PreferTag implements Comparable<PreferTag> {
         final StringBuilder omitBuilder = new StringBuilder();
 
         if (!(value.equals("minimal") || receivedParam.equals("minimal"))) {
-            final List<String> appliedPrefs = asList(new String[] { SERVER_MANAGED.toString(),
-                                                                    LDP_NAMESPACE + "PreferMinimalContainer",
-                                                                    LDP_NAMESPACE + "PreferMembership",
-                                                                    LDP_NAMESPACE + "PreferContainment" });
-            final List<String> includePrefs = asList(new String[] { EMBED_CONTAINED.toString(),
-                                                                    INBOUND_REFERENCES.toString() });
+            final List<String> appliedPrefs = asList(SERVER_MANAGED.toString(),
+                    LDP_NAMESPACE + "PreferMinimalContainer",
+                    LDP_NAMESPACE + "PreferMembership",
+                    LDP_NAMESPACE + "PreferContainment");
+            final List<String> includePrefs = asList(EMBED_CONTAINED.toString(),
+                    INBOUND_REFERENCES.toString());
             includes.stream().forEach(param -> includeBuilder.append(
                     (appliedPrefs.contains(param) || includePrefs.contains(param)) ? param + " " : ""));
 
