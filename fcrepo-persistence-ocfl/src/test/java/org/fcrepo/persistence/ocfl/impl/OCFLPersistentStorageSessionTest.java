@@ -603,7 +603,7 @@ public class OCFLPersistentStorageSessionTest {
         mockMappingAndIndex(mintOCFLObjectId(RESOURCE_ID), RESOURCE_ID, ROOT_OBJECT_ID, mapping);
 
         // create the binary
-        final var binOperation = mockNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
+        final var binOperation = mockCreateNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
 
         // perform the create non-rdf source operation
         session.persist(binOperation);
@@ -623,7 +623,7 @@ public class OCFLPersistentStorageSessionTest {
         mockMappingAndIndex(mintOCFLObjectId(RESOURCE_ID), RESOURCE_ID, ROOT_OBJECT_ID, mapping);
 
         // create the binary
-        final var binOperation = mockNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
+        final var binOperation = mockCreateNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
 
         // perform the create non-rdf source operation
         session.persist(binOperation);
@@ -646,7 +646,7 @@ public class OCFLPersistentStorageSessionTest {
         mockMappingAndIndex(mintOCFLObjectId(RESOURCE_ID), RESOURCE_ID, ROOT_OBJECT_ID, mapping);
 
         // create the binary
-        final var binOperation = mockNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
+        final var binOperation = mockCreateNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
         // perform the create non-rdf source operation
         session.persist(binOperation);
         // commit to OCFL
@@ -666,7 +666,7 @@ public class OCFLPersistentStorageSessionTest {
         mockMappingAndIndex(mintOCFLObjectId(RESOURCE_ID), RESOURCE_ID, ROOT_OBJECT_ID, mapping);
 
         // create the binary
-        final var binOperation = mockNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
+        final var binOperation = mockCreateNonRdfSourceOperation(BINARY_CONTENT, USER_PRINCIPAL, RESOURCE_ID);
 
         // perform the create non-rdf source operation
         session.persist(binOperation);
@@ -677,7 +677,7 @@ public class OCFLPersistentStorageSessionTest {
         assertEquals(BINARY_CONTENT, result);
     }
 
-    private NonRdfSourceOperation mockNonRdfSourceOperation(final String content,
+    private NonRdfSourceOperation mockCreateNonRdfSourceOperation(final String content,
             final String userPrincipal, final String resourceId) {
         final var binOperation = mock(NonRdfSourceOperation.class,
                 withSettings().extraInterfaces(CreateResourceOperation.class));
