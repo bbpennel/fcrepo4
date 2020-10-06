@@ -57,7 +57,10 @@ public class ReplacePropertiesServiceImpl extends AbstractService implements Rep
 
             hasRestrictedPath(fedoraId.getFullId());
 
-            ensureValidMemberRelation(inputModel);
+            final var headers = pSession.getHeaders(fedoraId, null);
+            final var interactionModel = headers.getInteractionModel();
+
+            ensureValidDirectContainer(fedoraId, interactionModel, inputModel);
 
             ensureValidACLAuthorization(inputModel);
 
